@@ -1369,7 +1369,7 @@ public:
         always_assert(!t->in_progress());
         t->start();
     }
-
+        // Free qnode here
 		static void delete_transaction() {
 				delete TThread::txn;
 				TThread::txn = nullptr;
