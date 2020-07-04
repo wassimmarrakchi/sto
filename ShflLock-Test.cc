@@ -8,6 +8,7 @@
 #include <experimental/random>
 #include <vector>
 #include <thread>
+#include <unistd.h>
 
 struct account {
 	struct lock password;
@@ -18,7 +19,7 @@ struct account bank[100];
 
 void BankTest() {
 	std::thread::id thread_id = std::this_thread::get_id();
-	printf("Thread %lli was started.\n", (long long int) &thread_id);
+	printf("Thread %lli has started.\n", (long long int) &thread_id);
 	for(int i = 0; i < 10000; i++) {
 		int account_nbr_send = std::experimental::randint(0, 99);
 		spin_lock(&bank[account_nbr_send].password);
@@ -45,9 +46,11 @@ int main() {
 
 	printf("Waiting for threads to finish...\n");
 	// Wait for the threads to finish,
-	for (auto &t : threads) {
-		t.join();
+	for (int i = 0; i < nbr_threads; i++) {
+		threads[i].join();
 	};
+
+	usleep(10000000);
 
 	printf("Threads completed. Calculating total balance across accounts...\n");
 	int total = 0;
