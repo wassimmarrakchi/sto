@@ -24,7 +24,10 @@ void BankTest() {
 		int account_nbr_send = std::experimental::randint(0, 99);
 		spin_lock(&bank[account_nbr_send].password);
 		int amount_sub = std::experimental::randint(1,bank[account_nbr_send].balance);
-		int account_nbr_receive = std::experimental::randint(0, 99);
+		int account_nbr_receive = account_nbr_send;
+		while (account_nbr_receive == account_nbr_send) {
+			account_nbr_receive = std::experimental::randint(0, 99);
+		};
 		spin_lock(&bank[account_nbr_receive].password);
 		bank[account_nbr_send].balance -= amount_sub;
 		bank[account_nbr_receive].balance += amount_sub;
@@ -39,7 +42,7 @@ int main() {
 
 	std::thread threads[nbr_threads];
 
-	printf("Starting off four threads of bank transactions...\n");
+	printf("Starting off %i thread(s) of bank transactions...\n", nbr_threads);
 	for(int i = 0; i < nbr_threads; i++) {
 		threads[i] = std::thread(BankTest);
 	};
@@ -50,7 +53,7 @@ int main() {
 		threads[i].join();
 	};
 
-	usleep(10000000);
+	// usleep(10000000);
 
 	printf("Threads completed. Calculating total balance across accounts...\n");
 	int total = 0;
