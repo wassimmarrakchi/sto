@@ -15,9 +15,9 @@ int MAX_SHUFFLES = 1024;
 time_t WAIT_TIME = 1; // seconds
 
 struct lock {
-    std::atomic<bool> glock;
-    std::atomic<bool> no_stealing;
-    std::atomic<struct qnode*> tail;
+    std::atomic<bool> glock =  ATOMIC_VAR_INIT(UNLOCKED);
+    std::atomic<bool> no_stealing = ATOMIC_VAR_INIT(false);
+    std::atomic<struct qnode*> tail = ATOMIC_VAR_INIT(nullptr);
 };
 
 struct qnode {

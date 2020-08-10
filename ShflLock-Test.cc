@@ -38,7 +38,7 @@ void BankTest() {
 };
 
 int main() {
-	int nbr_threads = 1;
+	int nbr_threads = 2;
 
 	std::thread threads[nbr_threads];
 
@@ -61,7 +61,7 @@ int main() {
 		total += bank[i].balance;
 	}
 
-	printf("The total balance across the accounts is: %i", total);
+	printf("The total balance across the accounts is: %i\n", total);
 
 	return 0;
 };
